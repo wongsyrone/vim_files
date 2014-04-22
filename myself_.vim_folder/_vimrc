@@ -1,0 +1,215 @@
+"是否兼容VI，compatible为兼容，nocompatible为不完全兼容
+"如果设置为compatible，则tab将不会变成空格
+set nocompatible
+
+source $VIMRUNTIME/vimrc_example.vim
+"source $VIMRUNTIME/mswin.vim "this one will make CTRL-V become a paste command
+
+"自动检测文件类型并加载相应的设置，snipMate插件需要打开这个配置选项
+filetype plugin indent on
+
+"语法高亮
+syntax on
+
+"显示输入状态
+set showmode
+
+"自动缩进
+set autoindent
+
+"设置 Backspace 和 Delete 的灵活程度，backspace=2 则没有任何限制
+"设置在哪些模式下使用鼠标功能，mouse=a 表示所有模式
+set mouse=a
+set backspace=2
+"不自动换行
+set nowrap
+"设置超过100字符自动换行
+"set textwidth=100
+
+"智能对齐方式
+set smartindent
+"一个tab是4个字符
+set tabstop=4
+"按一次tab前进4个字符
+set softtabstop=4
+"用空格代替tab
+set expandtab
+"设置自动缩进
+set ai!
+"缩进的字符个数
+set cindent shiftwidth=4
+"set autoindent shiftwidth=2
+
+"设置折叠模式
+set foldcolumn=4
+"光标遇到折叠，折叠就打开
+"set foldopen=all
+"移开折叠时自动关闭折叠
+"set foldclose=all
+"zf zo zc zd zr zm zR zM zn zi zN
+"依缩进折叠
+"   manual  手工定义折叠
+"   indent  更多的缩进表示更高级别的折叠
+"   expr    用表达式来定义折叠
+"   syntax  用语法高亮来定义折叠
+"   diff    对没有更改的文本进行折叠
+"   marker  对文中的标志折叠
+set foldmethod=syntax
+"启动时不要自动折叠代码
+set foldlevel=100
+"依标记折叠
+set foldmethod=marker
+
+"显示行号
+set number
+
+"打开光标的行列位置显示功能
+set ruler
+
+"显示中文引号
+set ambiwidth=double
+
+"行高亮
+set cursorline
+"列高亮，与函数列表有冲突
+set cursorcolumn
+
+"设置命令行的高度
+set cmdheight=1
+
+"高亮搜索的关键字
+set hlsearch
+
+"搜索忽略大小写
+set ignorecase
+
+"设置命令历史行数
+set history=400
+
+"启动的时候不显示那个援助索马里儿童的提示
+"set shortmess=atI
+
+"不要闪烁
+"set novisualbell
+
+"显示TAB健
+set list
+set listchars=tab:>-,trail:-
+
+"高亮字符，让其不受100列限制
+":highlight OverLength ctermbg=red ctermfg=white guibg=grey guifg=white
+":match OverLength '\%101v.*'
+
+"状态行颜色
+"highlight StatusLine guifg=SlateBlue guibg=Yellow
+"highlight StatusLineNC guifg=Gray guibg=White
+
+"去掉有关vi一致性模式，避免以前版本的一些bug和局限
+set nocp
+
+"增强模式中的命令行自动完成操作
+set wildmenu
+
+"执行 Vim 缺省提供的 .vimrc 文件的示例，包含了打开语法加亮显示等最常用的功能
+source $VIMRUNTIME/vimrc_example.vim
+
+"缺省不产生备份文件
+set nobackup
+"在输入括号时光标会短暂地跳到与之相匹配的括号处，不影响输入
+set showmatch
+
+
+"设定文件浏览器目录为当前目录
+set bsdir=buffer
+"自动切换当前目录为当前文件所在的目录
+set autochdir
+"自动重新加载外部修改内容
+set autoread
+
+"使PHP识别EOT字符串
+hi link phpheredoc string
+
+"允许在有未保存的修改时切换缓冲区
+set hidden
+
+"进入当前编辑的文件的目录
+autocmd BufEnter * exec "cd %:p:h"
+
+"保存文件的格式顺序
+"set fileformats=dos,unix
+
+"配色（更多的配色见colors目录和http://www.cs.cmu.edu/~maverick/VimColorSchemeTest/index-c.html）
+"colorscheme peacock_light
+colorscheme camo
+"set t_Co=256
+
+"置粘贴模式，这样粘贴过来的程序代码就不会错位了。
+set paste
+
+"Alt + -> 打开下一个文件
+map <M-right> <ESC>:bn<RETURN>
+"Alt + <- 打开上一个文件
+map <M-left> <ESC>:bp<RETURN>
+
+"使用TAB键自动完成
+"This function determines, wether we are on
+"the start of the line text(then tab indents)
+"or if we want to try auto completion
+function! InsertTabWrapper()
+    let col=col('.')-1
+    if !col || getline('.')[col-1] !~ '\k'
+        return "\<TAB>"
+    else
+        return "\<C-N>"
+    endif
+endfunction
+
+"能够漂亮的显示.NFO文件
+function! SetFileEncodings(encodings)
+    let b:myfileencodingsbak=&fileencodings
+    let &fileencodings=a:encodings
+endfunction
+function! RestoreFileEncodings()
+    let &fileencodings=b:myfileencodingsbak
+    unlet b:myfileencodingsbak
+endfunction
+au BufReadPre *.nfo call SetFileEncodings('cp437')|set ambiwidth=single
+au BufReadPost *.nfo call RestoreFileEncodings()
+
+
+"F2处理行尾的空格以及文件尾部的多余空行
+"Automatically remove trailing spaces when saving a file.
+autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
+"Remove indenting on empty line
+map <F2> :w<CR>:call CleanupBuffer(1)<CR>:noh<CR>
+function! CleanupBuffer(keep)
+    " Skip binary files
+    if (&bin > 0)
+        return
+    endif
+    " Remove spaces and tabs from end of every line, if possible
+    silent! %s/\s\+$//ge
+    " Save current line number
+    let lnum = line(".")
+    " number of last line
+    let lastline = line("$")
+    let n        = lastline
+    " while loop
+    while (1)
+        " content of last line
+        let line = getline(n)
+        " remove spaces and tab
+        if (!empty(line))
+            break
+        endif
+        let n = n - 1
+    endwhile
+    " Delete all empty lines at the end of file
+    let start = n+1+a:keep
+    if (start < lastline)
+        execute n+1+a:keep . "," . lastline . "d"
+    endif
+    " after clean spaces and tabs, jump back
+    exec "normal " . lnum . "G"
+endfunction
+
