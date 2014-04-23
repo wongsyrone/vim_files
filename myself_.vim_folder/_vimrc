@@ -101,8 +101,8 @@ set listchars=tab:>-,trail:-
 ":match OverLength '\%101v.*'
 
 "状态行颜色
-"highlight StatusLine guifg=SlateBlue guibg=Yellow
-"highlight StatusLineNC guifg=Gray guibg=White
+highlight StatusLine guifg=SlateBlue guibg=Yellow
+highlight StatusLineNC guifg=Gray guibg=White
 
 "去掉有关vi一致性模式，避免以前版本的一些bug和局限
 set nocp
@@ -127,7 +127,7 @@ set autochdir
 set autoread
 
 "使PHP识别EOT字符串
-hi link phpheredoc string
+"hi link phpheredoc string
 
 "允许在有未保存的修改时切换缓冲区
 set hidden
@@ -136,7 +136,7 @@ set hidden
 autocmd BufEnter * exec "cd %:p:h"
 
 "保存文件的格式顺序
-"set fileformats=dos,unix
+set fileformats=unix,dos
 
 "配色（更多的配色见colors目录和http://www.cs.cmu.edu/~maverick/VimColorSchemeTest/index-c.html）
 "colorscheme peacock_light
@@ -175,41 +175,4 @@ function! RestoreFileEncodings()
 endfunction
 au BufReadPre *.nfo call SetFileEncodings('cp437')|set ambiwidth=single
 au BufReadPost *.nfo call RestoreFileEncodings()
-
-
-"F2处理行尾的空格以及文件尾部的多余空行
-"Automatically remove trailing spaces when saving a file.
-autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
-"Remove indenting on empty line
-map <F2> :w<CR>:call CleanupBuffer(1)<CR>:noh<CR>
-function! CleanupBuffer(keep)
-    " Skip binary files
-    if (&bin > 0)
-        return
-    endif
-    " Remove spaces and tabs from end of every line, if possible
-    silent! %s/\s\+$//ge
-    " Save current line number
-    let lnum = line(".")
-    " number of last line
-    let lastline = line("$")
-    let n        = lastline
-    " while loop
-    while (1)
-        " content of last line
-        let line = getline(n)
-        " remove spaces and tab
-        if (!empty(line))
-            break
-        endif
-        let n = n - 1
-    endwhile
-    " Delete all empty lines at the end of file
-    let start = n+1+a:keep
-    if (start < lastline)
-        execute n+1+a:keep . "," . lastline . "d"
-    endif
-    " after clean spaces and tabs, jump back
-    exec "normal " . lnum . "G"
-endfunction
 
