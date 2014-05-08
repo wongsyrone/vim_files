@@ -14,6 +14,13 @@ syntax on
 "显示输入状态
 set showmode
 
+" 256 color support
+set t_Co=256
+
+" 256 color for vim
+"set t_AB=^[[48;5;%dm
+"set t_AF=^[[38;5;%dm
+
 "自动缩进
 set autoindent
 
@@ -140,8 +147,8 @@ set fileformats=unix,dos
 
 "配色（更多的配色见colors目录和http://www.cs.cmu.edu/~maverick/VimColorSchemeTest/index-c.html）
 "colorscheme peacock_light
-colorscheme camo
-"set t_Co=256
+colorscheme 256-jungle 
+
 
 "置粘贴模式，这样粘贴过来的程序代码就不会错位了。
 set paste
