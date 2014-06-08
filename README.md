@@ -34,21 +34,21 @@ VIM编译配置选项：
 
 参数说明：
 
---enable-gui=gtk2 #gtk2支持,也可以使用gnome
---enable-cscope ＃cscope支持
---enable-pythoninterp ＃python支持
---enable-multibyte ＃双字符支持
---enable-xim ＃输入法支持
---enable-fontset ＃双字符支持
---with-features=huge ＃最大特性支持
+--enable-gui=gtk2 #gtk2支持,也可以使用gnome  
+--enable-cscope ＃cscope支持  
+--enable-pythoninterp ＃python支持  
+--enable-multibyte ＃双字符支持  
+--enable-xim ＃输入法支持  
+--enable-fontset ＃双字符支持  
+--with-features=huge ＃最大特性支持  
 
 
 补充说明：
 
-在CentOS上编译时不支持“--enable-multibyte”
-在debian上编译时不支持“--enable-fontset”
-在debian上编译GVIM所依赖的包：xorg-dev libx11-dev libgtk2.0-dev libncurses5-dev
-在CentOS上编译GVIM所依赖的包：libgtk2.0-dev libncurses5-dev libgnome-devel libgnomeui-devel libX11-devel libbonoboui-devel libXpm-devel libXt-devel
+在CentOS上编译时不支持“--enable-multibyte”  
+在debian上编译时不支持“--enable-fontset”  
+在debian上编译GVIM所依赖的包：xorg-dev libx11-dev libgtk2.0-dev libncurses5-dev  
+在CentOS上编译GVIM所依赖的包：libgtk2.0-dev libncurses5-dev libgnome-devel libgnomeui-devel libX11-devel libbonoboui-devel libXpm-devel libXt-devel  
 
 
 #### 其他人的安装配置
